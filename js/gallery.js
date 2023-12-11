@@ -100,22 +100,17 @@ const openModal = gallery.addEventListener("click", event => {
 
   if (event.target.classList.contains("gallery-image")) {
     
-    const fullImage = event.target.dataset.source;
-   
-    myModal = basicLightbox.create(`<img class="gallery-image" src= ${fullImage} data-source="https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820_1280.jpg" alt="Hokkaido Flower" style="filter: invert(0);">`);
+    myModal = basicLightbox.create(`<img class="gallery-image" src= ${event.target.dataset.source} alt= ${event.target.alt}">`);
     myModal.show();
-  }
+    document.addEventListener("keydown", keyPress);}
 
-  document.addEventListener("keydown", keyPress);
+  
 function keyPress(event) {
   if (event.code === "Escape" && myModal) {
     myModal.close();
-  }
-  document.removeEventListener("keydown", keyPress);
+    document.removeEventListener("keydown", keyPress);}}
 
-}
-
-}  );
+});
 
 
 
