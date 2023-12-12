@@ -93,25 +93,31 @@ images.forEach(({ preview, original, description }) => {
 });
 
 let myModal;
+let myModalIsOpen = false;
 
-const openModal = gallery.addEventListener("click", event => {
+gallery.addEventListener("click", event => {
    
   event.preventDefault();
 
   if (event.target.classList.contains("gallery-image")) {
     
-    myModal = basicLightbox.create(`<img class="gallery-image" src= ${event.target.dataset.source} alt= ${event.target.alt}">`);
+    myModal = basicLightbox.create(`<img class="gallery-image" src= "${event.target.dataset.source}" alt= "${event.target.alt}">`);
     myModal.show();
-    document.addEventListener("keydown", keyPress);}
+    myModalIsOpen = true;
+  }
 
-  
-function keyPress(event) {
-  if (event.code === "Escape" && myModal) {
-    myModal.close();
-    document.removeEventListener("keydown", keyPress);}}
+  if (myModalIsOpen) {  
+    document.addEventListener("keydown", keyPress);
+  }
 
 });
-
+  
+function keyPress(event) {
+  if (event.code === "Escape" && myModalIsOpen) {
+    myModal.close();
+    document.removeEventListener("keydown", keyPress);
+    myModalIsOpen = false;
+  }};
 
 
   
