@@ -69,7 +69,7 @@ const images = [
 
 const gallery = document.querySelector(".gallery");
 
-images.forEach(({ preview, original, description }) => {
+const galleryItems = images.map(({ preview, original, description }) => {
   const li = document.createElement("li");
   li.classList.add("gallery-item");
 
@@ -85,31 +85,35 @@ images.forEach(({ preview, original, description }) => {
 
   link.appendChild(img);
   li.appendChild(link);
-  gallery.appendChild(li);
+
+  return li;
 });
 
-let myModal;
+gallery.append(...galleryItems);
+
+const myModal = basicLightbox.create(`<img class="gallery-image" src="" alt="">`, {
+  onShow: () => { document.addEventListener("keydown", keyPress); },
+  onClose: () => { document.removeEventListener("keydown", keyPress); }
+});
 
 gallery.addEventListener("click", event => {
-event.preventDefault();
+  event.preventDefault();
+  if (!event.target.classList.contains("gallery-image")) {
+    return;
+  }
 
-if (event.target.classList.contains("gallery-image")) {
-  myModal = basicLightbox.create(`<img class="gallery-image" src="${event.target.dataset.source}" alt="${event.target.alt}">`,
-    { 
-      onShow: () => {document.addEventListener("keydown", keyPress);},
-      onClose: () => {document.removeEventListener("keydown", keyPress);}
-            }
-        );
-
-        myModal.show();
-    }
+  const modalImage = myModal.element().querySelector(".gallery-image");
+  modalImage.src = event.target.dataset.source;
+  modalImage.alt = event.target.alt;
+  myModal.show();
 });
 
 function keyPress(event) {
-    if (event.code === "Escape" && myModal) {
-        myModal.close();
-    }
+  if (event.code === "Escape" && myModal) {
+    myModal.close();
+  }
 }
+
 
 
 
